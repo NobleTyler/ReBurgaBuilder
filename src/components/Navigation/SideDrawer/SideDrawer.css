@@ -26,8 +26,3 @@
     height: 12%;
     margin-bottom: 32px;
 }
-@media(max-width:500px){
-    .DesktopOnly{
-        display: none;
-    }
-}

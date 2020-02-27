@@ -9,6 +9,10 @@
     margin: 10px;
     font-weight: bold;
 }
+.Button:disabled{
+    color:gray;
+    cursor: not-allowed;
+}
 
 .Button:first-of-type {
     margin-left: 0;

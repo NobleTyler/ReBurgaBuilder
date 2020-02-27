@@ -24,18 +24,18 @@ class BurgerBuilder extends Component {
     purchasable: false,
     purchasing: false,
     loading: false,
-    error:false
+    error: false
   }
   componentDidMount () {
     axios
       .get('https://react-burger-68669.firebaseio.com/ingredients.json')
       .then(response => {
-        this.setState({ ingredients: response.data });
-        })
-      .catch(error =>{
-          this.setState({error:true});
-    });
-}
+        this.setState({ ingredients: response.data })
+      })
+      .catch(error => {
+        this.setState({ error: true })
+      })
+  }
   updatePurchaseState (ingredients) {
     const sum = Object.keys(ingredients)
       .map(igKey => {
@@ -79,38 +79,21 @@ class BurgerBuilder extends Component {
     this.setState({ purchasing: !this.state.purchasing })
   }
   purchaseContinueHandler = () => {
-    /*
-    this.setState({ loading: true })
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.price,
-      customer: {
-        name: 'Ty N',
-        adress: {
-          street: 'Streename 1',
-          zipCode: '90210',
-          country: 'USA'
-        },
-        email: 'test@email.com'
-      },
-      deliveryMethod: 'Slow'
+    const queryParams = []
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          '=' +
+          encodeURIComponent(this.state.ingredients[i])
+      )
     }
-    axios
-      .post('/orders.json', order)
-      .then(response => this.setState({ loading: false, purchasing: false }))
-      .catch(error => this.setState({ loading: false, purchasing: false }))
-  */
- const queryParams=[]
- for( let i in this.state.ingredients){
-   queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]))
- }
- const queryString = queryParams.join('&')
- this.props.history.push({
-   pathname:'/checkout',
-   search: '?'+queryString
+    queryParams.push('price='+this.state.totalPrice)
+    const queryString = queryParams.join('&')
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString
+    })
   }
- )
- }
 
   render () {
     const disabledInfo = {
@@ -123,7 +106,7 @@ class BurgerBuilder extends Component {
     if (this.state.loading) {
       orderSummary = <Spinner />
     }
-    let burger = this.state.error? <p>Ingredients not loaded!</p>:<Spinner/>
+    let burger = this.state.error ? <p>Ingredients not loaded!</p> : <Spinner />
     if (this.state.ingredients) {
       burger = (
         <Ax>
@@ -158,8 +141,6 @@ class BurgerBuilder extends Component {
         {burger}
       </Ax>
     )
-    
   }
-  
 }
 export default withErrorHandler(BurgerBuilder, axios)

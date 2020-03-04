@@ -184,6 +184,7 @@ class ContactData extends Component {
       </form>
     )
     if (this.state.loading) {
+      console.log("contact data is loading")
       form = <Spinner />
     }
     return (

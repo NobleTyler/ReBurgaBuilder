@@ -133,6 +133,7 @@ class BurgerBuilder extends Component {
     }
     if (this.state.loading) {
       orderSummary = <Spinner />
+      console.log("It's loading")
     }
     return (
       <Ax>

@@ -12,18 +12,18 @@ const withErrorHandler = (WrappedComponent, axios) => {
         this.setState({ error: null })
         return req
       })
-      this.resInterceptor =axios.interceptors.response.use(
+      this.resInterceptor = axios.interceptors.response.use(
         res => res,
         error => {
           this.setState({ error: error })
         }
       )
     }
-    componentWillUnmount(){
-        //Call for testing
-        //console.log("WillUnmount has ejected interceptors",this.reqInterceptor,this.resInterceptor)
-        axios.interceptors.request.eject(this.reqInterceptor)
-        axios.interceptors.request.eject(this.resInterceptor)
+    componentWillUnmount () {
+      //Call for testing
+      //console.log("WillUnmount has ejected interceptors",this.reqInterceptor,this.resInterceptor)
+      axios.interceptors.request.eject(this.reqInterceptor)
+      axios.interceptors.request.eject(this.resInterceptor)
     }
     errorConfirmedHandler = () => {
       this.setState({ error: null })
@@ -31,8 +31,11 @@ const withErrorHandler = (WrappedComponent, axios) => {
     render () {
       return (
         <Ax>
-          <Modal show={this.state.error} modalClosed={this.errorConfirmedHandler}>
-            {this.state.error?this.state.error.message:null}
+          <Modal
+            show={this.state.error}
+            modalClosed={this.errorConfirmedHandler}
+          >
+            {this.state.error ? this.state.error.message : null}
           </Modal>
           <WrappedComponent {...this.props} />
         </Ax>

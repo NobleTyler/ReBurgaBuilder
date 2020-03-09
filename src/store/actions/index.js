@@ -4,5 +4,7 @@ export {
     initIngredients
 }
 from './burgerBuilder'
-export {purchaseBurgerStart}
+export {purchaseBurger,
+purchaseInit
+}
 from './order'

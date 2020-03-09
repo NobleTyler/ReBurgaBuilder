@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {connect } from 'react-redux'
+import { connect } from 'react-redux'
 import Button from '../../../components/UI/Button/Button'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import classes from './ContactData.css'
@@ -126,7 +126,6 @@ class ContactData extends Component {
       orderData: formData
     }
     this.props.onOrderBurger(order)
-    
   }
 
   inputChangedHandler = (event, inputIdentifier) => {
@@ -179,8 +178,8 @@ class ContactData extends Component {
         </Button>
       </form>
     )
-    if (this.state.loading) {
-      console.log("contact data is loading")
+    if (this.props.loading) {
+      console.log('contact data is loading')
       form = <Spinner />
     }
     return (
@@ -191,13 +190,16 @@ class ContactData extends Component {
     )
   }
 }
-const mapStateToProps = state =>{
-  return{
-    ings:state.ingredients,
-    price: state.totalPrice
+const mapStateToProps = state => {
+  return {
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    loading:state.order.loading
   }
 }
-const mapDispatchToProps= dispatch =>{
-  onOrderBurger: (orderData) => dispatch(actions.purchaseBurgerStart(orderData))
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: orderData => dispatch(actions.purchaseBurger(orderData))
+  }
 }
-export default connect(mapStateToProps)(withErrorHandler(ContactData,axios))
+export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(ContactData, axios))

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
 import classes from './Auth.css'
+import * as actions from '../../store/actions/index'
+import { connect } from 'react-redux'
 class Auth extends Component {
   state = {
     controls: {
@@ -48,17 +50,27 @@ class Auth extends Component {
     }
     return isValid
   }
-  inputChangedHandler = (event,controlName)=>{
-      const updatedControls={
-          ...this.state.controls,
-          [controlName]: {
-              ...this.state.controls[controlName],
-              value: event.target.value,
-              valid: this.checkValidity(event.target.value,this.state.controls[controlName].validation)
-              ,touched:true
-            }
+  inputChangedHandler = (event, controlName) => {
+    const updatedControls = {
+      ...this.state.controls,
+      [controlName]: {
+        ...this.state.controls[controlName],
+        value: event.target.value,
+        valid: this.checkValidity(
+          event.target.value,
+          this.state.controls[controlName].validation
+        ),
+        touched: true
       }
-      this.setState({controls:updatedControls})
+    }
+    this.setState({ controls: updatedControls })
+  }
+  submitHandler = event => {
+    event.preventDefault()
+    this.props.onAuth(
+      this.state.controls.email.value,
+      this.state.controls.password.value
+    )
   }
   render () {
     const formElementsArray = []
@@ -83,7 +95,7 @@ class Auth extends Component {
     ))
     return (
       <div className={classes.Auth}>
-        <form>
+        <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType='Success'>Submit</Button>
         </form>
@@ -91,5 +103,10 @@ class Auth extends Component {
     )
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuth: (email, password) => dispatch(actions.auth(email, password))
+  }
+}
 
-export default Auth
+export default connect(null, mapDispatchToProps)(Auth)

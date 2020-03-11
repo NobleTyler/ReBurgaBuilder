@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import './index.css'
+import * as actions from './store/actions/index'
+import {connect} from 'react-redux'
 import Layout from './components/Layout/Layout'
 import Checkout from './containers/Checkout/Checkout'
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder'
@@ -8,13 +10,8 @@ import Orders from './containers/Orders/Orders'
 import Auth from './containers/Auth/Auth'
 import Logout from './containers/Auth/Logout/Logout'
 class App extends Component {
-  state = {
-    show: true
-  }
   componentDidMount () {
-    setTimeout(() => {
-      this.setState({ show: false })
-    }, 5000)
+  this.props.onTryAutoSignup()
   }
   render () {
     // Add for testing eject <Layout>{this.state.show ? <BurgerBuilder /> : null}</Layout>
@@ -33,5 +30,9 @@ class App extends Component {
     )
   }
 }
-
-export default App
+const mapDispatchToProps= dispatch =>{
+  return{
+    onTryAutoSignup: () => dispatch(actions.authCheckState())
+  }
+}
+export default connect(null,mapDispatchToProps)(App)

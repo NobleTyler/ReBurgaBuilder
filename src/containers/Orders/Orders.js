@@ -10,7 +10,7 @@ class Orders extends Component {
     this.props.onFetchOrders(this.props.token,this.props.userId) 
   }
   render () {
-    console.log(this.props)
+    
     let orders = <Spinner />;
     if ( !this.props.loading ) {
         orders = this.props.orders.map( order => (

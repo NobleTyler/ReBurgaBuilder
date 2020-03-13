@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes'
 import axios from 'axios'
 import apiKey from './authKey'
+
+
 const miliToSeconds = 1000
 export const authStart = () =>{
     return{

@@ -139,7 +139,7 @@ class ContactData extends Component {
     for (let inputIdentifier in updatedOrderForm) {
       formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
     }
-    
+    console.log(formIsValid)
     this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid })
   }
 
@@ -172,7 +172,7 @@ class ContactData extends Component {
       </form>
     )
     if (this.props.loading) {
-      
+      console.log('contact data is loading')
       form = <Spinner />
     }
     return (

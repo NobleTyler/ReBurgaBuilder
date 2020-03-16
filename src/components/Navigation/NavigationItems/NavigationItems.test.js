@@ -7,17 +7,25 @@ import React from 'react'
 configure({ adapter: new Adapter() })
 
 describe('<NavigationItems />', () => {
-    let wrapper
-    beforeEach(() => {
-        wrapper = shallow(<NavigationItems />)
+  let wrapper
+  beforeEach(() => {
+    wrapper = shallow(<NavigationItems />)
+  })
+  it('should render two navigation items if not signed in', () => {
+    expect(wrapper.find(NavigationItem)).toHaveLength(2)
+  })
+  it('should render two navigation items if signed in', () => {
+    wrapper.setProps({
+      isAuthenticated: true
     })
-    it("should render two navigation items if not signed in", () => {
-        expect(wrapper.find(NavigationItem)).toHaveLength(2)
+    expect(wrapper.find(NavigationItem)).toHaveLength(3)
+  })
+  it('should render two navigation items if signed in', () => {
+    wrapper.setProps({
+      isAuthenticated: true
     })
-    it("should render two navigation items if signed in", () => {
-        wrapper.setProps({
-            isAuthenticated: true
-        })
-        expect(wrapper.find(NavigationItem)).toHaveLength(3)
-    })
+    expect(
+      wrapper.contains(<NavigationItem link='/logout'>Logout</NavigationItem>)
+    ).toEqual(true)
+  })
 })

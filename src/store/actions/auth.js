@@ -1,6 +1,4 @@
 import * as actionTypes from './actionTypes'
-import axios from 'axios'
-import apiKey from './authKey'
 
 
 const miliToSeconds = 1000
@@ -44,31 +42,11 @@ export const authFail = (error) =>{
 }
 
 export const auth = (email,password,isSignup) =>{
-    return dispatch => {
-        dispatch(authStart())
-        const authData ={
-            email:email,
-            password:password,
-            returnSecureToken:true
-        }
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='.concat(apiKey)
-        if(!isSignup){
-            url ='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='.concat(apiKey)
-        }
-        axios.post(url,authData)
-        .then(response =>{
-            const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * miliToSeconds)
-            localStorage.setItem('token',response.data.idToken)
-            localStorage.setItem('expirationDate',expirationDate)
-            localStorage.setItem('userId',response.data.localId)
-            dispatch(authSuccess(response.data.idToken,response.data.localId))
-            dispatch(checkAuthTimeout(response.data.expiresIn))
-        })
-        .catch(err =>{
-            dispatch(authFail(err.response.data.error))
-        }
-
-        )
+    return{
+        type: actionTypes.AUTH_USER,
+        email:email,
+        password:password,
+        isSignup:isSignup
     }
 }
 export const setAuthRedirectPath = path =>{

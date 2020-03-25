@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Modal from '../../components/UI/Modal/Modal'
-import Ax from '../Ax'
 
 const withErrorHandler = (WrappedComponent, axios) => {
   return class extends Component {
@@ -30,7 +29,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
     }
     render () {
       return (
-        <Ax>
+        <React.Fragment>
           <Modal
             show={this.state.error}
             modalClosed={this.errorConfirmedHandler}
@@ -38,7 +37,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
             {this.state.error ? this.state.error.message : null}
           </Modal>
           <WrappedComponent {...this.props} />
-        </Ax>
+        </React.Fragment>
       )
     }
   };

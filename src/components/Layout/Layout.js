@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Ax from '../../hoc/Ax'
 import {connect} from 'react-redux'
 import classes from './Layout.css'
 import Toolbar from '../Navigation/Toolbar/Toolbar'
@@ -18,7 +17,7 @@ class Layout extends Component {
   }
   render () {
     return (
-      <Ax>
+      <React.Fragment>
         <Toolbar 
         isAuth={this.props.isAuthenticated}
         drawerToggleClicked={this.sideDrawerToggleHandler} />
@@ -28,7 +27,7 @@ class Layout extends Component {
           open={this.state.showSideDrawer}
         />
         <main className={classes.Content}>{this.props.children}</main>
-      </Ax>
+      </React.Fragment>
     )
   }
 }

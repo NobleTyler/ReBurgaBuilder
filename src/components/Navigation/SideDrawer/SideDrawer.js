@@ -2,14 +2,13 @@ import React from 'react'
 import NavigationItems from '../NavigationItems/NavigationItems'
 import classes from './SideDrawer.css'
 import Backdrop from '../../UI/Backdrop/Backdrop'
-import Ax from '../../../hoc/Ax'
 const sideDrawer = props => {
   let attachedClasses = [classes.SideDrawer, classes.Close]
   if (props.open) {
     attachedClasses = [classes.SideDrawer, classes.Open]
   }
   return (
-    <Ax>
+    <React.Fragment>
       <Backdrop show={props.open} clicked={props.closed} />
       <div className={attachedClasses.join(' ')} onClick={props.closed}>
         <div className={classes.Logo}>
@@ -20,7 +19,7 @@ const sideDrawer = props => {
            />
         </nav>
       </div>
-    </Ax>
+    </React.Fragment>
   )
 }
 

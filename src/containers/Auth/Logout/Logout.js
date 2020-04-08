@@ -3,9 +3,11 @@ import { Redirect } from 'react-router-dom'
 import * as actions from '../../../store/actions/index'
 import { connect } from 'react-redux'
 const logout = props => {
+ const {onLogout} = props
   useEffect(() => {
-    props.onLogout(this.props.history)
-  }, [])
+    onLogout()
+  }, [onLogout])
+  
   return <Redirect to='/' />
 }
 const mapDispatchToProps = dispatch => {

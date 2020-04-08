@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect,Suspense } from 'react'
 import './index.css'
 import * as actions from './store/actions/index'
 import {connect} from 'react-redux'
@@ -6,36 +6,36 @@ import Layout from './components/Layout/Layout'
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder'
 import { Route, Switch,withRouter,Redirect } from 'react-router-dom'
 import Logout from './containers/Auth/Logout/Logout'
-import asyncComponent from './hoc/asyncComponent/asyncComponent'
+import spinner from './components/UI/Spinner/Spinner'
 
 //Lazy Loading Modules
-const asyncCheckout = asyncComponent(()=>{
+const Checkout = React.lazy(()=>{
   return import('./containers/Checkout/Checkout')
 })
-const asyncOrders = asyncComponent(()=>{
+const Orders = React.lazy(()=>{
   return import('./containers/Orders/Orders')
 })
-const asyncAuth = asyncComponent(()=>{
+const Auth = React.lazy(()=>{
   return import('./containers/Auth/Auth')
 })
 
-class App extends Component {
-  componentDidMount () {
-  this.props.onTryAutoSignup()
-  }
-  render () {
+const app = props =>  {
+  useEffect(() => {
+    props.onTryAutoSignup()
+  },[])
+
     let routes = (
       <Switch>
-            <Route path='/auth' component={asyncAuth} />
+            <Route path='/auth' render={()=><Auth/>} />
             <Route path='/' exact component={BurgerBuilder} />
             <Redirect to='/'/>
       </Switch>
     )
-    if(this.props.isAuthenticated){
+    if(props.isAuthenticated){
       routes =(<Switch>
-        <Route path='/checkout' component={asyncCheckout} />
-            <Route path='/orders' component={asyncOrders} />
-            <Route path='/auth' component={asyncAuth} />
+        <Route path='/checkout' render={()=> <Checkout/>} />
+            <Route path='/orders' render={()=> <Orders/>} />
+            <Route path='/auth' render={()=> <Auth/>} />
             <Route path='/logout' component={Logout} />
             <Route path='/' exact component={BurgerBuilder} />
             <Redirect to='/'/>
@@ -45,13 +45,12 @@ class App extends Component {
     return (
       <div>
         <Layout>
-          <Switch>
+          <Suspense fallback={spinner}>
             {routes}
-          </Switch>
+          </Suspense>
         </Layout>
       </div>
     )
-  }
 }
 const mapStateToProps = state => {
   return{
@@ -63,4 +62,4 @@ const mapDispatchToProps= dispatch =>{
     onTryAutoSignup: () => dispatch(actions.authCheckState())
   }
 }
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(App))
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(app))

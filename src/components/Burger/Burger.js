@@ -1,9 +1,12 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import classes from './Burger.css'
 import BurgerIngredient from './BurgerIngredients/BurgerIngredient'
+/**
+ * Basically map foreaches the keys, and seperates them into keys, then we make another sub array in there of how many of one thing we see
+ * @param {*} props 
+ */
 const burger = props => {
-  //Basically map foreaches the keys, and seperates them into keys, then we make another sub array in there of how many of one thing we see
   let transformedIngredients = Object.keys(props.ingredients)
     .map(igKey => {
       return [...Array(props.ingredients[igKey])].map((_, i) => {

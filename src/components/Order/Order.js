@@ -1,6 +1,12 @@
 import React from 'react'
 import classes from './Order.css'
 
+/**
+ *  take props then push the name and ammount per ingredient into a dictionary
+ *  then map that and create a span dynamically, using ig name key ammount from the ingredient
+ *  lots of that dynamic work happens in the map function where you can see it returns well ingredient output
+ * @param {ingredients, ig} props 
+ */
 const order = props => {
   const ingredients = []
 

@@ -3,6 +3,12 @@ import Burger from '../../Burger/Burger'
 import Button from '../../UI/Button/Button'
 import classes from './CheckoutSummary.css'
 
+/**
+ *  JSX code for teh checkout summary,
+ *  It's all in the modal the clicked calls functions passed through props to bring them back via Cancelled
+ *  Or the checkout page via continue 
+ * @param {*} props 
+ */
 const checkoutSummary = props => {
   return (
     <div className={classes.CheckoutSummary}>

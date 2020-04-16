@@ -1,12 +1,14 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
 import ContactData from './ContactData/ContactData'
 
+/**
+ * Contains checkout which handles checkout jsx as well as continuation. 
+ * @param {*} props 
+ */
   const checkout = props => { 
-
   const  checkoutCancelledHandler = () => {
     props.history.goBack()
   }
@@ -37,7 +39,10 @@ import ContactData from './ContactData/ContactData'
     }
     return summary
 }
-
+/**
+ * Hookup checkout to props so we can use it in this functional component
+ * @param {*} state 
+ */
 const mapStateToProps = state => {
   return {
     ings: state.burgerBuilder.ingredients,

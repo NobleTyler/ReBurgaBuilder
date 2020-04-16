@@ -7,8 +7,12 @@ import axios from '../../../axios-orders'
 import Input from '../../../components/UI/Input/Input'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../../store/actions/index'
-import { updateObject,checkValidity } from '../../../shared/utility'
-  
+import { updateObject, checkValidity } from '../../../shared/utility'
+
+/**
+ * this is the value that holsd contact data, useState connects it as a hook as well
+ * @param {*} props
+ */
 const contactData = props => {
   const [orderForm, setOrderForm] = useState({
     name: {
@@ -92,18 +96,19 @@ const contactData = props => {
       validation: {},
       valid: true
     }
-  });
-  const [formIsValid, setFormIsValid] = useState(false);
-
-
-
+  })
+  //form hooks
+  const [formIsValid, setFormIsValid] = useState(false)
+  /**
+   * Takes in an event that is not explitely handled does nothing, and then turns the formData into a list
+   * Then exectures the orderfunction using the token and the order attributes
+   * @param {*} event
+   */
   const orderHandler = event => {
     event.preventDefault()
     const formData = {}
     for (let formElementIdentifier in orderForm) {
-      formData[formElementIdentifier] = orderForm[
-        formElementIdentifier
-      ].value
+      formData[formElementIdentifier] = orderForm[formElementIdentifier].value
     }
     const order = {
       ingredients: props.ings,
@@ -113,19 +118,21 @@ const contactData = props => {
     }
     props.onOrderBurger(order, props.token)
   }
-
+  /**
+   *  handles input changes by taking in an event and calling the appropriate hooks to update the order form
+   *  then creates jsx based on said form in order to export it later
+   * @param {*} event
+   * @param {*} inputIdentifier
+   */
   const inputChangedHandler = (event, inputIdentifier) => {
-    const updatedFormElement = updateObject(
-      orderForm[inputIdentifier],
-      {
-        value: event.target.value,
-        touched: true,
-        valid: checkValidity(
-          event.target.value,
-          orderForm[inputIdentifier].validation
-        )
-      }
-    )
+    const updatedFormElement = updateObject(orderForm[inputIdentifier], {
+      value: event.target.value,
+      touched: true,
+      valid: checkValidity(
+        event.target.value,
+        orderForm[inputIdentifier].validation
+      )
+    })
     const updatedOrderForm = updateObject(orderForm, {
       [inputIdentifier]: updatedFormElement
     })
@@ -139,45 +146,46 @@ const contactData = props => {
     setOrderForm(updatedOrderForm)
     setFormIsValid(formIsValid)
   }
+  const formElementsArray = []
+  for (let key in orderForm) {
+    formElementsArray.push({
+      id: key,
+      config: orderForm[key]
+    })
+  }
 
-    const formElementsArray = []
-    for (let key in orderForm) {
-      formElementsArray.push({
-        id: key,
-        config: orderForm[key]
-      })
-    }
-    let form = (
-      <form onSubmit={orderHandler}>
-        {formElementsArray.map(formElement => (
-          <Input
-            elementType={formElement.config.elementType}
-            key={formElement.id}
-            elementConfig={formElement.config.elementConfig}
-            value={formElement.config.value}
-            invalid={!formElement.config.valid}
-            shouldValidate={formElement.config.validation}
-            touched={formElement.config.touched}
-            changed={event => inputChangedHandler(event, formElement.id)}
-          />
-        ))}
+  let form = (
+    <form onSubmit={orderHandler}>
+      {formElementsArray.map(formElement => (
+        <Input
+          elementType={formElement.config.elementType}
+          key={formElement.id}
+          elementConfig={formElement.config.elementConfig}
+          value={formElement.config.value}
+          invalid={!formElement.config.valid}
+          shouldValidate={formElement.config.validation}
+          touched={formElement.config.touched}
+          changed={event => inputChangedHandler(event, formElement.id)}
+        />
+      ))}
 
-        <Button btnType='Success' disabled={!formIsValid}>
-          Order
-        </Button>
-      </form>
-    )
-    if (props.loading) {
-      console.log('contact data is loading')
-      form = <Spinner />
-    }
-    return (
-      <div className={classes.ContactData}>
-        <h4>Enter contact data</h4>
-        {form}
-      </div>
-    )
+      <Button btnType='Success' disabled={!formIsValid}>
+        Order
+      </Button>
+    </form>
+  )
+  if (props.loading) {
+    console.log('contact data is loading')
+    form = <Spinner />
+  }
+  return (
+    <div className={classes.ContactData}>
+      <h4>Enter contact data</h4>
+      {form}
+    </div>
+  )
 }
+//Hooks up the form to the state so we can use it in this file
 const mapStateToProps = state => {
   return {
     ings: state.burgerBuilder.ingredients,
@@ -187,12 +195,14 @@ const mapStateToProps = state => {
     userId: state.auth.userId
   }
 }
+//deals with dispatching the purchased burger to props
 const mapDispatchToProps = dispatch => {
   return {
     onOrderBurger: (orderData, token) =>
       dispatch(actions.purchaseBurger(orderData, token))
   }
 }
+//connext and export an error handled contact data form also hooks in axios
 export default connect(
   mapStateToProps,
   mapDispatchToProps

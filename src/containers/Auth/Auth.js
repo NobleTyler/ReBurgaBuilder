@@ -8,6 +8,11 @@ import { Redirect } from 'react-router-dom'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import { updateObject, checkValidity } from '../../shared/utility'
 
+/**
+ *  Create the auth state set via props. Also you can caull authform to read and set to write
+ *  useState is what allows that to happen
+ * @param {*} props
+ */
 const auth = props => {
   const [authForm, setAuthForm] = useState({
     email: {
@@ -39,15 +44,28 @@ const auth = props => {
       touched: false
     }
   })
+
+  /**
+   * Same as above but it's for signup
+   */
   const [isSignup, setIsSignup] = useState(true)
 
-  const {buildingBurger,authRedirectPath,onSetAuthRedirectPath} = props
+  /**
+   * Calls use effect when either the building burger or auth are changed
+   * Is used to set redirect paths based on if user is building or done
+   */
+  const { buildingBurger, authRedirectPath, onSetAuthRedirectPath } = props
   useEffect(() => {
     if (!buildingBurger && authRedirectPath !== '/') {
       onSetAuthRedirectPath()
     }
-  }, [buildingBurger,authRedirectPath,onSetAuthRedirectPath])
-
+  }, [buildingBurger, authRedirectPath, onSetAuthRedirectPath])
+  /**
+   * Handles input changes, by taking in multiple event tpyes then caulling update object then checking validity
+   * Finally uses set Auth form to setup the atuh form with the object created from events
+   * @param {*} event
+   * @param {*} controlName
+   */
   const inputChangedHandler = (event, controlName) => {
     const updatedControls = updateObject(authForm, {
       [controlName]: updateObject(authForm[controlName], {
@@ -61,13 +79,23 @@ const auth = props => {
     })
     setAuthForm(updatedControls)
   }
+  /**
+   * Takes in events and calls on Auth to submit the email and password value while noting if it's a signup
+   * @param {*} event
+   */
   const submitHandler = event => {
     event.preventDefault()
     props.onAuth(authForm.email.value, authForm.password.value, isSignup)
   }
+  /**
+   * Toggles auth mode
+   */
   const switchAuthModeHandler = () => {
     setIsSignup(!isSignup)
   }
+  /**
+   * For each key in the form add it to ann array which is later mapped to a jsx component
+   */
   const formElementsArray = []
   for (let key in authForm) {
     formElementsArray.push({
@@ -114,7 +142,11 @@ const auth = props => {
     </div>
   )
 }
-
+/**
+ *  Takes in the state so we can use it as props in other methods
+ * this is done because it's using hooks in a functional component
+ * @param {*} state
+ */
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
@@ -124,6 +156,12 @@ const mapStateToProps = state => {
     authRedirectPath: state.auth.authRedirectPath
   }
 }
+/**
+ * This Dispatches the email and password to the store and then dispatches the redirect path
+ * useful for getting what is in the dispatch matched to props so we can use it in the container
+ * https://stackoverflow.com/questions/39419237/what-is-mapdispatchtoprops
+ * @param {*} dispatch
+ */
 const mapDispatchToProps = dispatch => {
   return {
     onAuth: (email, password, isSignup) =>
